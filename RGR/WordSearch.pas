@@ -1,28 +1,24 @@
 UNIT WordSearch;
 INTERFACE
 CONST
-  AlhabetEN = ['A'..'Z', 'a'..'z'];
-  AlhabetRU = ['Ä'..'è', 'ê'..'ü', '†'..'Ø', '‡'..'Ô', '','Ò'];
+  Alhabet = ['A'..'Z', 'a'..'z', 'Ä'..'è', 'ê'..'ü', '†'..'Ø', '‡'..'Ô', '','Ò'];
   PROCEDURE GetWord(VAR FIn: TEXT; VAR FoundWord: STRING);
 IMPLEMENTATION
   FUNCTION ReplaceChar(Ch: CHAR): CHAR;
-  VAR
-    TempCh: CHAR;
   BEGIN
     IF Ch IN ['Ä'..'è']
     THEN
-      TempCh := CHR(ORD(Ch) + (ORD('†') - ORD('Ä')));
+      Ch := CHR(ORD(Ch) + (ORD('†') - ORD('Ä')));
     IF Ch IN ['ê'..'ü']
     THEN
-      TempCh := CHR(ORD(Ch) + (ORD('‡') - ORD('ê')));
-
+      Ch := CHR(ORD(Ch) + (ORD('‡') - ORD('ê')));
     IF Ch IN ['A'..'Z']
     THEN
-      TempCh:= CHR(ORD(Ch) + (ORD('a') - ORD('A')));
+      Ch:= CHR(ORD(Ch) + (ORD('a') - ORD('A')));
     IF Ch IN ['','Ò']
     THEN
-      TempCh := '•';
-    ReplaceChar := TempCh
+      Ch := '•';
+    ReplaceChar := Ch
   END;
   PROCEDURE GetWord(VAR FIn: TEXT; VAR FoundWord: STRING);
   VAR
@@ -35,12 +31,9 @@ IMPLEMENTATION
     DO
       BEGIN
         READ(FIn, Ch);
-        IF (Ch IN AlhabetEN) OR (Ch IN AlhabetRU)
+        IF (Ch IN Alhabet)
         THEN
-          BEGIN
-            ReplaceChar(Ch);
-            FoundWord := FoundWord + Ch
-          END
+            FoundWord := FoundWord + ReplaceChar(Ch)
         ELSE
           IF NOT (FoundWord = '')
           THEN
